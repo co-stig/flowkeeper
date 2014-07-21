@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema 
+    xmlns="http://www.w3.org/2001/XMLSchema" 
+    targetNamespace="http://flowkeeper.org/server"
+    xmlns:tns="http://flowkeeper.org/server"
+    elementFormDefault="qualified">
+
+	<simpleType name="StatusType">
+		<restriction base="string">
+			<enumeration value="new" />
+			<enumeration value="started" />
+			<enumeration value="completed" />
+			<enumeration value="failed" />
+		</restriction>
+	</simpleType>
+
+	<simpleType name="UsernameType">
+		<restriction base="string">
+			<pattern value="[\w\d\-_]+" />
+		</restriction>
+	</simpleType>
+
+	<complexType name="InterruptionType">
+		<attribute name="start" type="dateTime" />
+		<attribute name="duration" type="int" />
+		<attribute name="comment" type="string" />
+	</complexType>
+
+	<complexType name="MessageType">
+		<attribute name="from" type="tns:UsernameType" use="required" />
+		<attribute name="when" type="dateTime" />
+		<attribute name="text" type="string" />
+	</complexType>
+
+	<complexType name="PlanType">
+		<sequence>
+			<element name="workitem" type="tns:WorkitemType" minOccurs="1"
+				maxOccurs="unbounded" />
+		</sequence>
+		<attribute name="date" type="date" use="required" />
+		<attribute name="status" type="tns:StatusType" />
+	</complexType>
+
+	<complexType name="PomodoroType">
+		<sequence>
+			<element name="interruption" type="tns:InterruptionType"
+				minOccurs="0" maxOccurs="unbounded" />
+			<element name="message" type="tns:MessageType" minOccurs="0"
+				maxOccurs="unbounded" />
+		</sequence>
+		<attribute name="planned" type="boolean" use="required" />
+		<attribute name="status" type="tns:StatusType" use="required" />
+		<attribute name="start" type="dateTime" use="required" />
+		<attribute name="finish" type="dateTime" use="required" />
+	</complexType>
+
+	<complexType name="UserType">
+		<sequence>
+			<element name="plan" type="tns:PlanType" minOccurs="0"
+				maxOccurs="unbounded" />
+		</sequence>
+		<attribute name="id" type="tns:UsernameType" use="required" />
+		<attribute name="name" type="string" />
+		<attribute name="password" type="string" />
+		<attribute name="regdate" type="dateTime" />
+		<attribute name="pomodoro-length">
+			<simpleType>
+				<restriction base="int">
+					<minInclusive value="1" />
+					<maxInclusive value="120" />
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="break-length">
+			<simpleType>
+				<restriction base="int">
+					<minInclusive value="1" />
+					<maxInclusive value="120" />
+				</restriction>
+			</simpleType>
+		</attribute>
+	</complexType>
+
+	<complexType name="WorkitemType">
+		<sequence>
+			<element name="pomodoro" type="tns:PomodoroType" minOccurs="1"
+				maxOccurs="unbounded" />
+		</sequence>
+		<attribute name="title" type="string" />
+		<attribute name="section">
+			<simpleType>
+				<restriction base="string">
+					<enumeration value="planned" />
+					<enumeration value="unplanned" />
+					<enumeration value="urgent" />
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="status" type="tns:StatusType" />
+	</complexType>
+
+	<element name="interruption" type="tns:InterruptionType" />
+	<element name="interruptions">
+		<complexType>
+			<sequence>
+				<element name="interruption" type="tns:InterruptionType"
+					minOccurs="0" maxOccurs="unbounded" />
+			</sequence>
+		</complexType>
+	</element>
+
+	<element name="message" type="tns:MessageType" />
+	<element name="messages">
+		<complexType>
+			<sequence>
+				<element name="message" type="tns:MessageType" minOccurs="0"
+					maxOccurs="unbounded" />
+			</sequence>
+		</complexType>
+	</element>
+
+	<element name="plan" type="tns:PlanType" />
+	<element name="plans">
+		<complexType>
+			<sequence>
+				<element name="plan" type="tns:PlanType" minOccurs="0"
+					maxOccurs="unbounded" />
+			</sequence>
+		</complexType>
+	</element>
+
+	<element name="pomodoro" type="tns:PomodoroType" />
+	<element name="pomodoros">
+		<complexType>
+			<sequence>
+				<element name="pomodoro" type="tns:PomodoroType" minOccurs="1"
+					maxOccurs="unbounded" />
+			</sequence>
+		</complexType>
+	</element>
+
+	<element name="user" type="tns:UserType" />
+	<element name="users">
+		<complexType>
+			<sequence>
+				<element name="user" type="tns:UserType" minOccurs="0"
+					maxOccurs="unbounded" />
+			</sequence>
+		</complexType>
+	</element>
+
+	<element name="workitem" type="tns:WorkitemType" />
+	<element name="workitems">
+		<complexType>
+			<sequence>
+				<element name="workitem" type="tns:WorkitemType" minOccurs="1"
+					maxOccurs="unbounded" />
+			</sequence>
+		</complexType>
+	</element>
+
+</schema>
