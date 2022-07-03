@@ -1,0 +1,26 @@
+# First registration
+CreateBacklog("Carryforward", "2020-01-01")
+
+# Start of day 1
+CreateBacklog("The first backlog", "2020-04-19")
+
+# Add two workitems
+CreateWorkitem("Wake up", "planned", "1")
+AddToBacklog("The first backlog", "Wake up")
+CreateWorkitem("Eat breakfast", "planned,simple", "3")
+AddToBacklog("The first backlog", "Eat breakfast")
+CreateWorkitem("Work a little", "planned", "2")
+AddToBacklog("The first backlog", "Work a little")
+
+# Simulate work
+StartPomodoro("Wake up", "")
+CompletePomodoro("Wake up", "finished")
+CompleteWorkitem("Wake up", "finished")
+
+StartPomodoro("Eat breakfast", "")
+CompletePomodoro("Eat breakfast", "finished")
+StartPomodoro("Eat breakfast", "")
+CompletePomodoro("Eat breakfast", "finished")
+
+# End of day 1 -- a workitem needs to be carried forward
+AddToBacklog("Carryforward", "Work a little")
